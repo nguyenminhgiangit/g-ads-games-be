@@ -1,0 +1,35 @@
+{
+  "name": "ads-games-be",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "build": "npm run clean && tsc",
+    "clean": "node node_modules/rimraf/bin lib",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check": "ts-node-dev --respawn --transpile-only src/test-config.ts",
+    "proto:gen": "./scripts/gen-proto.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.7.9",
+    "dotenv": "^16.4.5",
+    "grpc-tools": "^1.13.0",
+    "rimraf": "^2.7.1",
+    "ts-node": "^8.1.0",
+    "ts-node-dev": "^1.0.0-pre.63",
+    "ts-proto": "^2.7.5",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.13.4",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
