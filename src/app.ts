@@ -1,7 +1,11 @@
 import dotenv from 'dotenv';
 import express from "express";
 import cors from 'cors';
-import { spinRouter } from './routers/spin.router';
+import { connectDatabases } from './databases/mongodb.database';
+import { initRedis } from './configs/redis.config';
+import { authRouters } from './routers/auth.routes';
+import { userRouters } from './routers/user.routes';
+import { gameRouters } from './routers/game.router';
 dotenv.config();
 
 async function start() {
@@ -20,11 +24,18 @@ async function initApp() {
     );
 
     //routers
-    app.use(spinRouter);
+    app.use("/api/auth", authRouters);
+    app.use("/api/users", userRouters);
+    app.use("/api/game", gameRouters);
 
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-        console.log(`🚀 Server is running on port: ${port}`);
+    //connect db & run app
+    connectDatabases(async (connMap) => {
+        await initRedis(); // Đảm bảo Redis khởi tạo xong
+
+        const port = process.env.PORT || 3000;
+        app.listen(port, () => {
+            console.log(`🚀 Server is running on port: ${port}`);
+        });
     });
 }
 
