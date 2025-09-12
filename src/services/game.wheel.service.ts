@@ -100,7 +100,6 @@ export async function pickPiece(pieces: WheelPiece[]): Promise<WheelPiece> {
         //đến 31-12-2025
         const ttlSeconds = secondsUntilEndOfDay({ untilDate: new Date("2025-12-31") });
         const piece = await pickPieceAtomic(redis, redisKey, pieces, windowSize, ttlSeconds) ?? pieces[pieces.length - 1];
-        console.log('spin result:', piece);
         return piece;
     } catch (e: any) {
         console.error('pickPieceAtomic err: ', e);

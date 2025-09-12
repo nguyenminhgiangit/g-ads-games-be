@@ -1,6 +1,7 @@
 import { getClaimingPoint } from "../helpers/submission.helper";
 import { GameMilestone, GameService } from "../services/game.service";
 import { pickPiece } from "../services/game.wheel.service";
+import { submitClaimingInfo } from "../services/google.script.api.service";
 import { SubmissionService } from "../services/submission.service";
 import { AccessTokenPayload } from "../services/token.service";
 import { UserStateService } from "../services/user.state.service";
@@ -35,7 +36,6 @@ class GameController {
             const game = await GameService.currentGame();
             const gameId = game.id;
             const state = await UserStateService.resetSpins(userId, gameId);
-            console.log('state after:: ', state);
             res.send({ state });
         } catch (err: any) {
             res.status(404).json({ message: err.message });
@@ -68,7 +68,7 @@ class GameController {
             }
 
             // save submit 
-            await SubmissionService.add(
+            const submission = await SubmissionService.add(
                 gameId,
                 userId,
                 username,
@@ -78,6 +78,14 @@ class GameController {
                 currentPoint,
                 ip,
                 userAgent
+            );
+
+            //send gg sheet
+            submitClaimingInfo(
+                submission._id.toString(),
+                username,
+                email,
+                phone
             );
 
             //reset
