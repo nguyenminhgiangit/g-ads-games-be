@@ -1,3 +1,6 @@
+import { getRedis } from "../configs/redis.config";
+import { secondsUntilEndOfDay } from "../helpers/wheel.helper";
+import { pickPieceAtomic } from "./game.wheel.pick.service";
 
 export type WheelPiece = {
     key: string;
@@ -87,3 +90,21 @@ export const WheelService = {
         return DEFAULT_MAX_SPINS;
     },
 };
+
+export async function pickPiece(pieces: WheelPiece[]): Promise<WheelPiece> {
+    try {
+        const windowId = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const redis = getRedis();
+        const redisKey = `spin:quota:used:${windowId}`;
+        const windowSize = 1000;
+        //đến 31-12-2025
+        const ttlSeconds = secondsUntilEndOfDay({ untilDate: new Date("2025-12-31") });
+        const piece = await pickPieceAtomic(redis, redisKey, pieces, windowSize, ttlSeconds) ?? pieces[pieces.length - 1];
+        console.log('spin result:', piece);
+        return piece;
+    } catch (e: any) {
+        console.error('pickPieceAtomic err: ', e);
+        // fallback: nếu có lỗi thì trả về phần tử cuối
+        return pieces[pieces.length - 1];
+    }
+}

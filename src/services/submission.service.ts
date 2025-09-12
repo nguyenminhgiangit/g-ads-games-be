@@ -21,7 +21,6 @@ export const SubmissionService = {
         }
 
         const { start, end } = getTodayRangeVN();
-
         // Kiểm tra trùng trong cùng ngày (UTC)
         const exists = await Models.Submission.findOne({
             userId: new Types.ObjectId(userId),
