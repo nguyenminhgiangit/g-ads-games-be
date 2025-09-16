@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { Models } from "../models/model.registry";
 import { IUserState } from "../models/user.state.model";
+import { GameState } from "../types/game.type";
 
 // Mặc định số lượt cho mỗi game
 const DEFAULT_MAX_SPINS: Record<IUserState["gameId"], number> = {
@@ -8,10 +9,7 @@ const DEFAULT_MAX_SPINS: Record<IUserState["gameId"], number> = {
     slot: 2,
 };
 
-type GameState = {
-    spinLeft: number;
-    score: number;
-};
+
 
 export const UserStateService = {
     /**

@@ -61,7 +61,6 @@ async function callAppsScript(params: {
         try {
             const res = await doFetchWithTimeout(url, REQUEST_TIMEOUT_MS);
             const raw = await res.text();
-            console.log('res:: ', res);
 
             // cố gắng parse JSON nếu có
             try {

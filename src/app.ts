@@ -6,6 +6,7 @@ import { initRedis } from './configs/redis.config';
 import { authRouters } from './routers/auth.routes';
 import { userRouters } from './routers/user.routes';
 import { gameRouters } from './routers/game.router';
+import { gameConfigRouters } from './routers/game.config.router';
 dotenv.config();
 
 async function start() {
@@ -15,7 +16,16 @@ async function start() {
 async function initApp() {
     const app = express();
 
-    app.use(cors());
+    // app.use(cors());
+    app.use(cors({
+        origin: ["http://localhost:7456", "http://127.0.0.1:8080"], // whitelist
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+        maxAge: 86400,
+    }));
+
+
     app.use(express.json());
     app.use(
         express.urlencoded({
@@ -27,6 +37,7 @@ async function initApp() {
     app.use("/api/auth", authRouters);
     app.use("/api/users", userRouters);
     app.use("/api/game", gameRouters);
+    app.use("/api/admin", gameConfigRouters);
 
     //connect db & run app
     connectDatabases(async (connMap) => {

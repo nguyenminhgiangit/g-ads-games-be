@@ -1,10 +1,11 @@
 import { getClaimingPoint } from "../helpers/submission.helper";
-import { GameMilestone, GameService } from "../services/game.service";
+import { GameService } from "../services/game.service";
 import { pickPiece } from "../services/game.wheel.service";
 import { submitClaimingInfo } from "../services/google.script.api.service";
 import { SubmissionService } from "../services/submission.service";
 import { AccessTokenPayload } from "../services/token.service";
 import { UserStateService } from "../services/user.state.service";
+import { GameMilestone } from "../types/game.type";
 
 class GameController {
     async spin(req: any, res: any, next: any) {

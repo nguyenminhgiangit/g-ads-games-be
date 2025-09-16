@@ -5,7 +5,8 @@ dotenv.config();
 export enum ConnectionKey {
     Auth = 'auth',
     User = 'user',
-    Game = 'game'
+    Game = 'game',
+    GameConfig = 'game-config'
 }
 
 type ConnectionConfig = {
@@ -32,6 +33,10 @@ function connectionConfigList(): ConnectionConfig[] {
         {
             key: ConnectionKey.Game,
             uri: process.env.MONGO_GAME_URI!,
+        },
+        {
+            key: ConnectionKey.GameConfig,
+            uri: process.env.MONGO_GAME_CONFIGS_URI!,
         },
     ];
 }
@@ -74,4 +79,9 @@ export function getUserConn(): Connection {
 export function getGameConn(): Connection {
     return getConn(ConnectionKey.Game);
 }
+
+export function getGameConfigConn(): Connection {
+    return getConn(ConnectionKey.Game);
+}
+
 

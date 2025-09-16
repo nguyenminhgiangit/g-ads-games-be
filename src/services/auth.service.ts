@@ -3,8 +3,8 @@ import { Models } from '../models/model.registry';
 import { blacklistRefreshToken, isRefreshTokenBlacklisted } from '../helpers/redis.helper';
 import { CounterKeys, nextCounterSequence } from './counter.service';
 import { BCRYPT_ROUNDS, REFRESH_TOKEN_EXPIRES_IN } from '../configs/auth.config';
-import { PlatformMeta } from '../helpers/auth.helper';
 import { createOrReplaceSession } from './session.service';
+import { PlatformMeta } from '../types/auth.type';
 
 
 export const AuthService = {

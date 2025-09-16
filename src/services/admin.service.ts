@@ -11,7 +11,7 @@ export const AdminService = {
         if (!userId) throw new Error("User not found");
         const updated = await Models.User.findByIdAndUpdate(
             userId,
-            { displayName, gender, isBanned },
+            { displayName, gender, isBanned, birthday },
             { runValidators: true, new: true }
         ).lean();
 
@@ -21,6 +21,7 @@ export const AdminService = {
             id: updated._id,
             displayName: updated.displayName,
             gender: updated.gender,
+            birthday: updated.birthday,
             isBanned: updated.isBanned,
         };
     }

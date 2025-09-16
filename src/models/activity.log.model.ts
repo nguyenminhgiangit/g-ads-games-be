@@ -56,4 +56,4 @@ const ActivityLogSchema = new Schema<IActivityLog>({
 // Phân trang nhanh theo player/time
 ActivityLogSchema.index({ playerId: 1, createdAt: -1 });
 
-export default model<IActivityLog>('ActivityLog', ActivityLogSchema);
+// export default model<IActivityLog>('ActivityLog', ActivityLogSchema);

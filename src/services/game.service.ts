@@ -1,18 +1,8 @@
-import { WheelMilestone, WheelService, type WheelMeta } from "./game.wheel.service";
-import { SlotMilestone, SlotService, type SlotMeta } from "./game.slot.service";
+import { WheelService } from "./game.wheel.service";
+import { SlotService } from "./game.slot.service";
+import { GameId, GameMeta, GameMilestone, GameProvider } from "../types/game.type";
 
-export type GameId = "wheel" | "slot";
-export type GameMeta = WheelMeta | SlotMeta;
-export type GameMilestone = WheelMilestone | SlotMilestone;
-
-type Provider = {
-  id: GameId;
-  getDefaultMaxSpins: () => number;
-  getClaimMilestones: () => GameMilestone[];
-  getMeta: () => GameMeta;
-};
-
-const REGISTRY: Record<GameId, Provider> = {
+const REGISTRY: Record<GameId, GameProvider> = {
   wheel: WheelService,
   slot: SlotService,
 };

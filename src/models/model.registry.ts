@@ -1,4 +1,5 @@
 import { getCounterModel } from "./counter.model";
+import { getGameConfigModel } from "./game.config.model";
 import { getSessionModel } from "./session.model";
 import { getSubmissionModel } from "./submission.model";
 import { getUserModel } from "./user.model";
@@ -23,6 +24,10 @@ class ModelRegistry {
 
   get Submission() {
     return getSubmissionModel();
+  }
+
+  get GameConfig() {
+    return getGameConfigModel();
   }
 }
 

@@ -1,4 +1,5 @@
-import { GameMilestone } from "../services/game.service";
+import { GameMilestone } from "../types/game.type";
+
 
 export function getTodayRangeVN() {
     const now = new Date();

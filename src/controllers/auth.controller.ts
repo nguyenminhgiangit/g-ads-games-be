@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { AuthService } from '../services/auth.service';
 import { AccessTokenPayload } from '../services/token.service';
 class AuthController {

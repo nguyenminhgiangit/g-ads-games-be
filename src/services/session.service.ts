@@ -1,9 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { buildTokenBundle, PlatformMeta, TokenBundle } from '../helpers/auth.helper';
+import { buildTokenBundle } from '../helpers/auth.helper';
 import { Models } from '../models/model.registry';
 import { REFRESH_TOKEN_EXPIRES_IN } from '../configs/auth.config';
 import { generateAccessToken } from './token.service';
 import { blacklistRefreshToken } from '../helpers/redis.helper';
+import { PlatformMeta, TokenBundle } from '../types/auth.type';
 
 /**
  * XÓA session cũ cùng (userId, deviceId, platform) → TẠO session mới → SINH access/refresh token.

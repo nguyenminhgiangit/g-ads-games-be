@@ -1,10 +1,7 @@
 import { Models } from "../models/model.registry";
 import { IUser } from "../models/user.model";
+import { GameUser } from "../types/user.type";
 
-type GameUser = {
-    id: string;
-    displayName: string;
-};
 export const UserService = {
     getProfile: async (userId: string) => {
         if (!userId) throw new Error("User not found");
