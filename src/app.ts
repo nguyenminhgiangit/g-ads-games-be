@@ -16,14 +16,14 @@ async function start() {
 async function initApp() {
     const app = express();
 
-    // app.use(cors());
-    app.use(cors({
-        origin: ["http://localhost:7456", "http://127.0.0.1:8080"], // whitelist
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-        maxAge: 86400,
-    }));
+    app.use(cors());
+    // app.use(cors({
+    //     origin: ["http://localhost:7456", "http://127.0.0.1:8080"], // whitelist
+    //     credentials: true,
+    //     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    //     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    //     maxAge: 86400,
+    // }));
 
 
     app.use(express.json());
