@@ -1,4 +1,7 @@
 import { getClaimingPoint } from "../helpers/submission.helper";
+import { getReachedMilestone } from "../helpers/wheel.helper";
+import { listPlayerActions } from "../services/activity.log.read.service";
+import { logClaim, logReset, logSpin } from "../services/activity.log.write.service";
 import { GameService } from "../services/game.service";
 import { pickPiece } from "../services/game.wheel.service";
 import { submitClaimingInfo } from "../services/google.script.api.service";
@@ -13,8 +16,8 @@ class GameController {
             const { userId }: AccessTokenPayload = req.user;
             const gameMeta = await GameService.currentGame();
             const gameId = gameMeta.id;
-            const _state = await UserStateService.getGState(userId, gameId);
-            if (_state.spinLeft <= 0) {
+            const currentState = await UserStateService.getGState(userId, gameId);
+            if (currentState.spinLeft <= 0) {
                 return res.status(400).json({ error: "Out of turn" });
             }
 
@@ -23,9 +26,22 @@ class GameController {
             const key = pickedPiece.key;
             const reward = pickedPiece.reward;
 
-            const newScore = _state.score + reward;
-            const newSpinLeft = _state.spinLeft - 1;
+            const newScore = currentState.score + reward;
+            const newSpinLeft = currentState.spinLeft - 1;
             const state = await UserStateService.updateSpinAndScore(userId, gameId, newSpinLeft, newScore);
+
+            //log
+            const before = currentState;
+            const after = state;
+            await logSpin({
+                gameId,
+                playerId: userId,
+                pieceId: key,
+                pieceReward: reward,
+                before,
+                after
+            });
+
             res.send({ key, state });
         } catch (err: any) {
             res.status(404).json({ message: err.message });
@@ -36,7 +52,20 @@ class GameController {
             const { userId }: AccessTokenPayload = req.user;
             const game = await GameService.currentGame();
             const gameId = game.id;
+            const currentState = await UserStateService.getGState(userId, gameId);
             const state = await UserStateService.resetSpins(userId, gameId);
+
+            //log
+            const before = currentState;
+            const after = state;
+            await logReset({
+                gameId,
+                playerId: userId,
+                reason: "action-player",
+                before,
+                after,
+            });
+
             res.send({ state });
         } catch (err: any) {
             res.status(404).json({ message: err.message });
@@ -58,8 +87,8 @@ class GameController {
             const gameMeta = await GameService.currentGame();
             const gameId = gameMeta.id;
             const claimMiletones: GameMilestone[] = gameMeta.claims;
-            const userState = await UserStateService.getGState(userId, gameId);
-            const currentPoint = userState.score;
+            const currentState = await UserStateService.getGState(userId, gameId);
+            const currentPoint = currentState.score;
             const claimingPoint = getClaimingPoint(currentPoint, claimMiletones);
 
             //kiểm tra claimedPoit client gửi lên có đúng với server không, 
@@ -67,6 +96,8 @@ class GameController {
             if (claimedPoint != claimingPoint) {
                 return res.status(400).json({ error: "Claiming info is wrong." });
             }
+
+            const claimingReward = getReachedMilestone(claimedPoint, claimMiletones)?.label ?? '🎁';
 
             // save submit 
             const submission = await SubmissionService.add(
@@ -81,9 +112,10 @@ class GameController {
                 userAgent
             );
 
+            const claimedId = submission._id.toString();
             //send gg sheet
             submitClaimingInfo(
-                submission._id.toString(),
+                claimedId,
                 username,
                 email,
                 phone
@@ -91,8 +123,39 @@ class GameController {
 
             //reset
             const state = await UserStateService.resetSpins(userId, gameId);
+
+            //log
+            const before = currentState;
+            const after = state;
+            await logClaim({
+                gameId,
+                playerId: userId,
+                milestone: claimedPoint,
+                rewardId: claimingReward,
+                claimedId,
+                before,
+                after
+            });
+
             const message = 'Your information has been sent successfully.';
             res.send({ message, state });
+        } catch (err: any) {
+            res.status(404).json({ message: err.message });
+        }
+    }
+    async getActivities(req: any, res: any, next: any) {
+        try {
+            const { userId }: AccessTokenPayload = req.user;
+            const { gameId, type, page, pageSize } = req.query;
+
+            const activities = await listPlayerActions(userId, {
+                gameId,
+                type,
+                page,
+                pageSize
+            });
+
+            res.send(activities);
         } catch (err: any) {
             res.status(404).json({ message: err.message });
         }

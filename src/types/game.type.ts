@@ -1,7 +1,9 @@
 import { SlotMeta, SlotMilestone } from "./slot.type";
 import { WheelMeta, WheelMilestone } from "./wheel.type";
 
-export type GameId = 'wheel' | 'slot';
+
+export const GAME_ID_ENUM = ['wheel', 'slot'] as const;
+export type GameIdType = (typeof GAME_ID_ENUM)[number];
 
 export type GameState = {
     spinLeft: number;
@@ -14,7 +16,7 @@ export type GameMeta = WheelMeta | SlotMeta;
 export type GameMilestone = WheelMilestone | SlotMilestone;
 
 export type GameProvider = {
-    id: GameId;
+    id: GameIdType;
     getMaxSpins: () => number;
     getClaimMilestones: () => GameMilestone[];
     getMeta: () => GameMeta;

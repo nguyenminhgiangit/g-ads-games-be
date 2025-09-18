@@ -27,13 +27,5 @@ export const AdminService = {
             birthday: updated.birthday,
             isBanned: updated.isBanned,
         };
-    },
-    async getGameConfig(): Promise<GameMeta> {
-        return await GameService.currentGame();
-    },
-    async updateGameConfig(payload: any) {
-        validateConfig(payload);
-        return await GameService.updateCurrentConfigs(payload as GameMeta);
-
-    },
+    }
 };

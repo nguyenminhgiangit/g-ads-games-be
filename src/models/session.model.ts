@@ -1,10 +1,11 @@
 import { Schema, Document, Types, Model } from 'mongoose';
 import { getAuthConn } from '../databases/mongodb.database';
+import { PLATFORM_ENUM, PlatformType } from '../types/session.type';
 
 export interface ISession extends Document {
   userId: Types.ObjectId;
   deviceId: string;
-  platform: 'web' | 'ios' | 'android';
+  platform: PlatformType;
   refreshToken: string;
   ip?: string;
   userAgent?: string;
@@ -16,7 +17,7 @@ export interface ISession extends Document {
 const SessionSchema = new Schema<ISession>({
   userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   deviceId: { type: String, required: true },
-  platform: { type: String, enum: ['web', 'ios', 'android'], required: true },
+  platform: { type: String, enum: PLATFORM_ENUM, required: true },
   refreshToken: { type: String, required: true },
   ip: String,
   userAgent: String,

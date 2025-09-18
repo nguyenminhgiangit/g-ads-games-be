@@ -1,5 +1,6 @@
 import { Document, Model, Schema } from 'mongoose';
 import { getUserConn } from '../databases/mongodb.database';
+import { GENDER_ENUM, GenderType, ROLE_ENUM, RoleType } from '../types/user.type';
 
 export interface IUser extends Document {
   guestId: string; //browserId
@@ -9,9 +10,9 @@ export interface IUser extends Document {
   displayName: string;
   avatarUrl: string;
   birthday: Date;
-  gender: 'male' | 'female' | 'other';
+  gender: GenderType;
   isBanned: boolean;
-  role: 'user' | 'admin';
+  role: RoleType;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -22,9 +23,9 @@ const UserSchema = new Schema<IUser>({
   displayName: { type: String, required: false },
   avatarUrl: { type: String, required: false },
   birthday: { type: Date, required: false },
-  gender: { type: String, enum: ['male', 'female', 'other'] },
+  gender: { type: String, enum: GENDER_ENUM },
   isBanned: { type: Boolean, default: false },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  role: { type: String, enum: ROLE_ENUM, default: 'user' },
 }, { timestamps: true });
 
 export function getUserModel(): Model<IUser> {

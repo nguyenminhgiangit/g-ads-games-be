@@ -5,8 +5,7 @@ dotenv.config();
 export enum ConnectionKey {
     Auth = 'auth',
     User = 'user',
-    Game = 'game',
-    GameConfig = 'game-config'
+    Game = 'game'
 }
 
 type ConnectionConfig = {
@@ -33,11 +32,7 @@ function connectionConfigList(): ConnectionConfig[] {
         {
             key: ConnectionKey.Game,
             uri: process.env.MONGO_GAME_URI!,
-        },
-        {
-            key: ConnectionKey.GameConfig,
-            uri: process.env.MONGO_GAME_CONFIGS_URI!,
-        },
+        }
     ];
 }
 
@@ -49,7 +44,7 @@ export async function connectDatabases(callback: (connMap: ConnMap) => void): Pr
     if (configList.length > 0) {
         console.log(`✅ Mongoose connected:`);
     }
-    
+
     const connectionPromises = configList.map(async ({ key, uri }) => {
         const conn = await mongoose.createConnection(uri).asPromise();
         connections[key] = conn;

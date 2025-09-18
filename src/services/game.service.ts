@@ -1,43 +1,43 @@
 import { WheelService } from "./game.wheel.service";
 import { SlotService } from "./game.slot.service";
-import { GameId, GameMeta, GameMilestone, GameProvider } from "../types/game.type";
+import { GameIdType, GameMeta, GameMilestone, GameProvider } from "../types/game.type";
 
-const REGISTRY: Record<GameId, GameProvider> = {
+const REGISTRY: Record<GameIdType, GameProvider> = {
   wheel: WheelService,
   slot: SlotService,
 };
 
 export const GameService = {
   /** Danh sách game được hỗ trợ */
-  getSupportedGameIds(): GameId[] {
-    return Object.keys(REGISTRY) as GameId[];
+  getSupportedGameIds(): GameIdType[] {
+    return Object.keys(REGISTRY) as GameIdType[];
   },
 
-  getMaxSpins(gameId: GameId): number {
+  getMaxSpins(gameId: GameIdType): number {
     const p = REGISTRY[gameId];
     if (!p) throw new Error(`Game '${gameId}' is not supported`);
     return p.getMaxSpins();
   },
 
-  getClaimMilestones(gameId: GameId): GameMilestone[] {
+  getClaimMilestones(gameId: GameIdType): GameMilestone[] {
     const p = REGISTRY[gameId];
     if (!p) throw new Error(`Game '${gameId}' is not supported`);
     return p.getClaimMilestones();
   },
 
   /** Lấy meta tĩnh theo gameId (không chứa thông tin user) */
-  getMeta(gameId: GameId): GameMeta {
+  getMeta(gameId: GameIdType): GameMeta {
     const p = REGISTRY[gameId];
     if (!p) throw new Error(`Game '${gameId}' is not supported`);
     return p.getMeta();
   },
 
-  async initConfigs(gameId: GameId): Promise<GameMeta> {
+  async initConfigs(gameId: GameIdType): Promise<GameMeta> {
     const p = REGISTRY[gameId];
     if (!p) throw new Error(`Game '${gameId}' is not supported`);
     return await p.initConfigs();
   },
-  async updateConfigs(gameId: GameId, config: any): Promise<any> {
+  async updateConfigs(gameId: GameIdType, config: any): Promise<any> {
     const p = REGISTRY[gameId];
     if (!p) throw new Error(`Game '${gameId}' is not supported`);
     return await p.updateConfigs(config);
@@ -48,7 +48,7 @@ export const GameService = {
    * - Ví dụ: đọc từ feature flag, cấu hình hệ thống, A/B, v.v.
    * - Ở đây mặc định trả "wheel".
    */
-  resolveCurrentGameId(): GameId {
+  resolveCurrentGameId(): GameIdType {
     return "wheel";
   },
 
@@ -63,7 +63,7 @@ export const GameService = {
     return this.initConfigs(id);
   },
   async updateCurrentConfigs(config: any) {
-    const gameId = config?.id as GameId;
+    const gameId = config?.id as GameIdType;
     return await this.updateConfigs(gameId, config);
   }
 };

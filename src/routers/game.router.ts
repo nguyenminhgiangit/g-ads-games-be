@@ -8,6 +8,6 @@ gameRouters.post('/reset', authMiddleware, gameController.reset);
 gameRouters.post('/submit-info', authMiddleware, gameController.submitInfo);
 // gameRouters.post('/claim',authMiddleware,  wheelController.spin);
 
-// gameRouters.get('/history', authMiddleware, wheelController.spin);
+gameRouters.get('/activities', authMiddleware, gameController.getActivities);
 
 export { gameRouters }

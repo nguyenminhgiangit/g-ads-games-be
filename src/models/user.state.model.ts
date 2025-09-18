@@ -1,8 +1,9 @@
 import { Schema, Document, Types, Model } from 'mongoose';
 import { getGameConn } from '../databases/mongodb.database';
+import { GameIdType, GAME_ID_ENUM } from '../types/game.type';
 
 export interface IUserState extends Document {
-    gameId: 'wheel' | 'slot';
+    gameId: GameIdType;
     userId: Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
@@ -15,7 +16,7 @@ export interface IUserState extends Document {
 }
 
 const UserStateSchema = new Schema<IUserState>({
-    gameId: { type: String, enum: ['wheel', 'slot'], required: true },
+    gameId: { type: String, enum: GAME_ID_ENUM, required: true },
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },

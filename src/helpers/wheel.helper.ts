@@ -66,3 +66,11 @@ export function makeDistKey(suffix: string) {
 export function makeIndexKey() {
     return `wheel:dist:{quota:used}:__index`;
 }
+
+export function getReachedMilestone(milestone: number, claims = DEFAULT_CLAIMINGS): WheelMilestone | null {
+  // đảm bảo đã sort theo reward tăng dần
+  const sorted = [...claims].sort((a, b) => a.reward - b.reward);
+  let hit: WheelMilestone | null = null;
+  for (const c of sorted) if (milestone >= c.reward) hit = c; else break;
+  return hit;
+}

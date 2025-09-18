@@ -1,7 +1,7 @@
 import { Schema, Document, Model } from "mongoose";
 import { WheelMilestone, WheelPiece } from "../types/wheel.type";
 import { getGameConfigConn } from "../databases/mongodb.database";
-import { GameId } from "../types/game.type";
+import { GAME_ID_ENUM, GameIdType } from "../types/game.type";
 
 // Sub-schemas
 const WheelPieceSchema = new Schema<WheelPiece>(
@@ -15,7 +15,7 @@ const ClaimSchema = new Schema(
 
 // Parent schema
 export interface IGameConfig extends Document {
-    gameId: GameId;
+    gameId: GameIdType;
     version: string;                               // unique
     status: "draft" | "published" | "archived";
     pieces?: WheelPiece[];
@@ -28,7 +28,7 @@ export interface IGameConfig extends Document {
 
 const GameConfigSchema = new Schema<IGameConfig>(
     {
-        gameId: { type: String, enum: ['wheel', 'slot'], required: true },
+        gameId: { type: String, enum: GAME_ID_ENUM, required: true },
         version: { type: String, required: true, unique: true, index: true },
         status: { type: String, enum: ["draft", "published", "archived"], required: true, index: true },
         pieces: { type: [WheelPieceSchema], default: [] },

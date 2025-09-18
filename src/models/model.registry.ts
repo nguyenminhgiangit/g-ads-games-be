@@ -1,3 +1,4 @@
+import { getActivityLogModel } from "./activity.log.model";
 import { getCounterModel } from "./counter.model";
 import { getGameConfigModel } from "./game.config.model";
 import { getSessionModel } from "./session.model";
@@ -28,6 +29,10 @@ class ModelRegistry {
 
   get GameConfig() {
     return getGameConfigModel();
+  }
+
+  get ActivityLog() {
+    return getActivityLogModel();
   }
 }
 

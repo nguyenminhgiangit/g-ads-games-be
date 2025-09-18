@@ -1,5 +1,5 @@
 import { IGameConfig } from "../models/game.config.model";
-import { GameId } from "../types/game.type";
+import { GAME_ID_ENUM, GameIdType } from "../types/game.type";
 
 export function validateConfig(payload: Pick<IGameConfig, "id" | "pieces" | "claims" | "maxSpin">) {
     const { id, pieces, claims, maxSpin } = payload;
@@ -27,7 +27,6 @@ export function validateConfig(payload: Pick<IGameConfig, "id" | "pieces" | "cla
     }
 }
 
-const ALLOWED_GAME_IDS: GameId[] = ["wheel", "slot"];
-function isGameId(_id: GameId): _id is GameId {
-    return ALLOWED_GAME_IDS.includes(_id);
+function isGameId(_id: GameIdType): _id is GameIdType {
+    return GAME_ID_ENUM.includes(_id);
 }

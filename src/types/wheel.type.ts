@@ -1,5 +1,5 @@
 import Redis, { Cluster } from "ioredis";
-import { GameId } from "./game.type";
+import { GameIdType } from "./game.type";
 
 export type WheelPiece = {
     key: string;
@@ -12,16 +12,15 @@ export type WheelMilestone = {
     label: string;
     reward: number;
 };
-
 export type WheelMeta = {
-    id: GameId;
+    id: GameIdType;
     pieces?: WheelPiece[];   // theo THỨ TỰ hiển thị
     claims?: WheelMilestone[];
     maxSpin?: number;
 };
 
 export type WheelConfig = {
-    id: GameId;
+    id: GameIdType;
     pieces?: WheelPiece[];   // theo THỨ TỰ hiển thị
     claims?: WheelMilestone[];
     maxSpin?: number;
