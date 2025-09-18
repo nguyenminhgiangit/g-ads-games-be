@@ -1,3 +1,4 @@
+import { Models } from "../models/model.registry";
 import { SlotMeta, SlotMilestone } from "../types/slot.type";
 
 
@@ -30,7 +31,7 @@ export const SlotService = {
     id: "slot" as const,
 
     /** Số lượt tối đa mặc định của slot (không theo user) */
-    getDefaultMaxSpins(): number {
+    getMaxSpins(): number {
         return DEFAULT_MAX_SPINS;
     },
 
@@ -48,4 +49,41 @@ export const SlotService = {
             symbolsMeta: cfg.symbolsMeta,
         };
     },
+    async initConfigs(): Promise<SlotMeta> {
+        try {
+            const gameId = 'wheel';
+            let configs = await Models.GameConfig.findOne({ gameId });
+            if (configs) {
+                console.log(` ✅ ${gameId}'s config is ready.. `);
+            }
+            else {
+                configs = await Models.GameConfig.create({
+                    status: "published",
+
+                    effectiveAt: null,                // áp dụng ngay
+                    createdBy: "system",
+                    publishedAt: new Date(),
+                });
+                console.log(` ✅ ${gameId}'s config is created new.. `);
+            }
+
+            return this.getMeta();
+        }
+        catch (err) {
+            console.log('initConfigs err: ', err);
+            return null;
+        }
+    },
+    async updateConfigs(payload: SlotMeta): Promise<any> {
+        try {
+            return {
+                ok: true,
+                message: 'Updating config is success.'
+            };
+        }
+        catch (err: any) {
+            console.log('Updating config failed err: ', err);
+            return { ok: false, error: err.message ?? 'Updating config failed.' };
+        }
+    }
 };

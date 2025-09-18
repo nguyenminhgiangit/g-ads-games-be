@@ -13,10 +13,10 @@ export const GameService = {
     return Object.keys(REGISTRY) as GameId[];
   },
 
-  getDefaultMaxSpins(gameId: GameId): number {
+  getMaxSpins(gameId: GameId): number {
     const p = REGISTRY[gameId];
     if (!p) throw new Error(`Game '${gameId}' is not supported`);
-    return p.getDefaultMaxSpins();
+    return p.getMaxSpins();
   },
 
   getClaimMilestones(gameId: GameId): GameMilestone[] {
@@ -30,6 +30,17 @@ export const GameService = {
     const p = REGISTRY[gameId];
     if (!p) throw new Error(`Game '${gameId}' is not supported`);
     return p.getMeta();
+  },
+
+  async initConfigs(gameId: GameId): Promise<GameMeta> {
+    const p = REGISTRY[gameId];
+    if (!p) throw new Error(`Game '${gameId}' is not supported`);
+    return await p.initConfigs();
+  },
+  async updateConfigs(gameId: GameId, config: any): Promise<any> {
+    const p = REGISTRY[gameId];
+    if (!p) throw new Error(`Game '${gameId}' is not supported`);
+    return await p.updateConfigs(config);
   },
 
   /**
@@ -47,9 +58,12 @@ export const GameService = {
     return this.getMeta(id);
   },
 
-  //   async spin() {
-  //     const id = this.resolveCurrentGameId();
-  //     const meta = this.getMeta(id);
-  //     const pieces = meta.
-  //   }
+  async initCurrentConfigs() {
+    const id = this.resolveCurrentGameId();
+    return this.initConfigs(id);
+  },
+  async updateCurrentConfigs(config: any) {
+    const gameId = config?.id as GameId;
+    return await this.updateConfigs(gameId, config);
+  }
 };

@@ -46,11 +46,14 @@ function connectionConfigList(): ConnectionConfig[] {
  */
 export async function connectDatabases(callback: (connMap: ConnMap) => void): Promise<void> {
     const configList = connectionConfigList();
-
+    if (configList.length > 0) {
+        console.log(`✅ Mongoose connected:`);
+    }
+    
     const connectionPromises = configList.map(async ({ key, uri }) => {
         const conn = await mongoose.createConnection(uri).asPromise();
         connections[key] = conn;
-        console.log(`✅ Mongoose connected: ${conn.name}`);
+        console.log(`   🔌🤝 ${conn.name}`);
     });
 
     try {

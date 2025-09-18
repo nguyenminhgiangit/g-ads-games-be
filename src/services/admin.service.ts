@@ -1,4 +1,7 @@
 import { Models } from "../models/model.registry";
+import { GameMeta } from "../types/game.type";
+import { validateConfig } from "./game.config.validate.service";
+import { GameService } from "./game.service";
 
 export const AdminService = {
     updateUser: async (
@@ -24,5 +27,13 @@ export const AdminService = {
             birthday: updated.birthday,
             isBanned: updated.isBanned,
         };
-    }
+    },
+    async getGameConfig(): Promise<GameMeta> {
+        return await GameService.currentGame();
+    },
+    async updateGameConfig(payload: any) {
+        validateConfig(payload);
+        return await GameService.updateCurrentConfigs(payload as GameMeta);
+
+    },
 };

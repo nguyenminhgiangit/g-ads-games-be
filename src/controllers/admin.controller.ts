@@ -17,5 +17,22 @@ class AdminController {
             res.status(400).json({ message: err.message });
         }
     }
+    async getConfig(req: any, res: any) {
+        try {
+            const config = await AdminService.getGameConfig();
+            res.json(config);
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+        }
+    }
+    async updateConfig(req: any, res: any) {
+        try {
+            const { payload } = req.body;
+            const updated = await AdminService.updateGameConfig(JSON.parse(payload));
+            res.json(updated);
+        } catch (err: any) {
+            res.status(400).json({ message: err.message });
+        }
+    }
 }
 export const adminController = new AdminController();

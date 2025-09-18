@@ -20,4 +20,11 @@ export type WheelMeta = {
     maxSpin?: number;
 };
 
+export type WheelConfig = {
+    id: GameId;
+    pieces?: WheelPiece[];   // theo THỨ TỰ hiển thị
+    claims?: WheelMilestone[];
+    maxSpin?: number;
+};
+
 export type RedisLike = Redis | Cluster;

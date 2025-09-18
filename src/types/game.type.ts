@@ -9,12 +9,15 @@ export type GameState = {
 };
 
 export type GameMeta = WheelMeta | SlotMeta;
+// export type GameConfig = WheelMeta | SlotMeta;
 
 export type GameMilestone = WheelMilestone | SlotMilestone;
 
 export type GameProvider = {
     id: GameId;
-    getDefaultMaxSpins: () => number;
+    getMaxSpins: () => number;
     getClaimMilestones: () => GameMilestone[];
     getMeta: () => GameMeta;
+    initConfigs: () => Promise<GameMeta>;
+    updateConfigs: (payload: any) => Promise<any>;
 };

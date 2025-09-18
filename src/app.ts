@@ -6,7 +6,8 @@ import { initRedis } from './configs/redis.config';
 import { authRouters } from './routers/auth.routes';
 import { userRouters } from './routers/user.routes';
 import { gameRouters } from './routers/game.router';
-import { gameConfigRouters } from './routers/game.config.router';
+import { onDBInit } from './services/database.service';
+import { adminRouters } from './routers/admin.routes';
 dotenv.config();
 
 async function start() {
@@ -37,10 +38,11 @@ async function initApp() {
     app.use("/api/auth", authRouters);
     app.use("/api/users", userRouters);
     app.use("/api/game", gameRouters);
-    app.use("/api/admin", gameConfigRouters);
+    app.use("/api/admin", adminRouters);
 
     //connect db & run app
     connectDatabases(async (connMap) => {
+        await onDBInit();
         await initRedis(); // Đảm bảo Redis khởi tạo xong
 
         const port = process.env.PORT || 3000;

@@ -1,6 +1,6 @@
 export type SlotMeta = {
     id: "slot";
-    reels: string[][];         // ma trận ký hiệu theo từng reel
+    reels?: string[][];         // ma trận ký hiệu theo từng reel
     paylines?: number[][];     // các dòng ăn thưởng (tùy chọn)
     symbolsMeta?: Record<string, { payout?: number }>;
     claims?: SlotMilestone[],
