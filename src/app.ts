@@ -36,7 +36,7 @@ async function initApp() {
 
     //routers
     app.use("/api/auth", authRouters);
-    app.use("/api/users", userRouters);
+    // app.use("/api/users", userRouters);
     app.use("/api/game", gameRouters);
     app.use("/api/admin", adminRouters);
 

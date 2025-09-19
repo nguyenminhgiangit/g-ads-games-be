@@ -37,18 +37,18 @@ class UserController {
             res.status(400).json({ message: err.message });
         }
     }
-    async gameForMe(req: any, res: any) {
-        try {
-            const { userId }: AccessTokenPayload = req.user;
-            const user = await UserService.getGameProfile(userId);
-            const game = await GameService.currentGame();
-            const gameId = game.id ?? 'wheel';
-            const state = await UserStateService.getGState(userId, gameId);
-            const result = { user, game, state };
-            res.json(result);
-        } catch (err: any) {
-            res.status(404).json({ message: err.message });
-        }
-    }
+    // async gameForMe(req: any, res: any) {
+    //     try {
+    //         const { userId }: AccessTokenPayload = req.user;
+    //         const user = await UserService.getGameProfile(userId);
+    //         const game = await GameService.currentGame();
+    //         const gameId = game.id ?? 'wheel';
+    //         const state = await UserStateService.getGState(userId, gameId);
+    //         const result = { user, game, state };
+    //         res.json(result);
+    //     } catch (err: any) {
+    //         res.status(404).json({ message: err.message });
+    //     }
+    // }
 }
 export const userController = new UserController();

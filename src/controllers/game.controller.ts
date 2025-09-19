@@ -7,10 +7,24 @@ import { pickPiece } from "../services/game.wheel.service";
 import { submitClaimingInfo } from "../services/google.script.api.service";
 import { SubmissionService } from "../services/submission.service";
 import { AccessTokenPayload } from "../services/token.service";
+import { UserService } from "../services/user.service";
 import { UserStateService } from "../services/user.state.service";
 import { GameMilestone } from "../types/game.type";
 
 class GameController {
+    async gameMe(req: any, res: any, next: any) {
+        try {
+            const { userId }: AccessTokenPayload = req.user;
+            const user = await UserService.getGameProfile(userId);
+            const game = await GameService.currentGame();
+            const gameId = game.id ?? 'wheel';
+            const state = await UserStateService.getGState(userId, gameId);
+            const result = { user, game, state };
+            res.json(result);
+        } catch (err: any) {
+            res.status(404).json({ message: err.message });
+        }
+    }
     async spin(req: any, res: any, next: any) {
         try {
             const { userId }: AccessTokenPayload = req.user;

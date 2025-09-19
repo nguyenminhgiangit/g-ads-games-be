@@ -39,7 +39,7 @@ export const UserService = {
         const user = await Models.User.findById(userId).lean<IUser>();
         if (!user) throw new Error("User not found.");
         const resp: GameUser = {
-            id: userId,
+            // id: userId,
             displayName: user.displayName,
         }
         return resp;

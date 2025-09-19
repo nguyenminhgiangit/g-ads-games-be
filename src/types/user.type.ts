@@ -5,6 +5,6 @@ export const ROLE_ENUM = ['user', 'admin'] as const;           // runtime (dùng
 export type RoleType = (typeof ROLE_ENUM)[number];
 
 export type GameUser = {
-    id: string;
+    id?: string;
     displayName: string;
 };
